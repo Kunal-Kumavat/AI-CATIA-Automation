@@ -1,73 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ChatGPT UI Clone</title>
+  <meta charset="UTF-8">
+  <title>AI CATIA Automation</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 h-screen flex flex-col">
+<body class="h-screen w-screen bg-gray-100 text-gray-900">
+  <div class="flex h-full">
+    <!-- Chat Section -->
+    <div class="w-1/2 border-r border-gray-300 flex flex-col">
+      <div class="flex-1 overflow-y-auto p-4" id="chat-window">
+        <!-- Chat messages will be appended here -->
+      </div>
+      <form id="chat-form" class="border-t border-gray-300 p-4 flex items-center gap-2">
+        <input type="file" id="file-input" class="text-sm" />
+        <input type="text" id="user-input" placeholder="Type your prompt..." class="flex-1 p-2 border rounded-md" />
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Send</button>
+      </form>
+    </div>
 
-  <!-- Chat Container -->
-  <div id="chat-window" class="flex-1 overflow-y-auto p-4 space-y-4">
-    <!-- Chat messages will be dynamically inserted here -->
+    <!-- Output Section -->
+    <div class="w-1/2 p-4 flex flex-col items-center">
+      <div class="w-full h-[80%] flex items-center justify-center border bg-white rounded-md shadow">
+        <img id="cad-image" src="" alt="CAD Output" class="max-h-full max-w-full object-contain hidden" />
+        <p id="placeholder-text" class="text-gray-400">Image output will appear here</p>
+      </div>
+      <div class="mt-4 flex gap-4">
+        <button id="prev-btn" class="px-4 py-2 bg-gray-300 rounded-md">◀ Prev</button>
+        <button id="next-btn" class="px-4 py-2 bg-gray-300 rounded-md">Next ▶</button>
+      </div>
+    </div>
   </div>
 
-  <!-- Input Bar -->
-  <form id="chat-form" class="bg-white p-4 flex items-center border-t border-gray-300">
-    <input
-      type="text"
-      id="user-input"
-      class="flex-1 border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      placeholder="Send a message..."
-      required
-    />
-    <button
-      type="submit"
-      class="ml-4 bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 transition"
-    >
-      Send
-    </button>
-  </form>
-
-  <script>
-    const chatWindow = document.getElementById('chat-window');
-    const chatForm = document.getElementById('chat-form');
-    const userInput = document.getElementById('user-input');
-
-    function appendMessage(role, text) {
-      const msgDiv = document.createElement('div');
-      msgDiv.classList.add('max-w-3xl', 'px-4', 'py-2', 'rounded-xl', 'whitespace-pre-wrap', 'shadow-sm');
-
-      if (role === 'user') {
-        msgDiv.classList.add('bg-blue-100', 'self-end', 'ml-auto');
-        msgDiv.innerText = "🧑 " + text;
-      } else {
-        msgDiv.classList.add('bg-gray-200', 'self-start', 'mr-auto');
-        msgDiv.innerText = "🤖 " + text;
-      }
-
-      const wrapper = document.createElement('div');
-      wrapper.classList.add('flex', 'flex-col');
-      wrapper.appendChild(msgDiv);
-      chatWindow.appendChild(wrapper);
-      chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
-
-    chatForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const userText = userInput.value.trim();
-      if (!userText) return;
-
-      appendMessage('user', userText);
-      userInput.value = '';
-
-      // Simulate assistant reply (Replace this with actual backend response logic)
-      setTimeout(() => {
-        appendMessage('assistant', "This is a simulated response to: " + userText);
-      }, 600);
-    });
-  </script>
-
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
