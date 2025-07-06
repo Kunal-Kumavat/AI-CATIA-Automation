@@ -12,12 +12,25 @@
       <div class="flex-1 overflow-y-auto p-4" id="chat-window">
         <!-- Chat messages will be appended here -->
       </div>
-      <form id="chat-form" class="border-t border-gray-300 p-4 flex items-center gap-2">
-        <input type="file" id="file-input" class="text-sm" />
-        <input type="text" id="user-input" placeholder="Type your prompt..." class="flex-1 p-2 border rounded-md" />
+      <form id="chat-form" method="POST" enctype="multipart/form-data" action="/upload">
+        <input type="file" id="file-input" name="catpart_file" class="text-sm" />
+        <input type="text" id="user-input" name="user_input" placeholder="Type your prompt..."
+          class="flex-1 p-2 border rounded-md" />
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Send</button>
       </form>
     </div>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %} 
+    {% endwith %}
+
+
 
     <!-- Output Section -->
     <div class="w-1/2 p-4 flex flex-col items-center">
@@ -32,6 +45,6 @@
     </div>
   </div>
 
-  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script src="{{ url_for('static', filename='index.js') }}"></script>
 </body>
 </html>

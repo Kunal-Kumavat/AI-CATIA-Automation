@@ -72,3 +72,21 @@ function updateLastBotMessage(text) {
   const lastBot = [...messages].reverse().find(m => m.classList.contains('bg-gray-200'));
   if (lastBot) lastBot.textContent = text;
 }
+
+
+
+document.getElementById('file-input').addEventListener('change', function () {
+  const form = document.getElementById('upload-form');
+  const formData = new FormData(form);
+
+  fetch('/upload', {
+    method: 'POST',
+    body: formData
+  }).then(response => {
+    if (response.ok) {
+      console.log('File sent to CATIA.');
+    } else {
+      console.error('Failed to send file.');
+    }
+  });
+});
