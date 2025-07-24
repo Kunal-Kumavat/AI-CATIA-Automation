@@ -1,0 +1,48 @@
+@keyframes progress {
+  0% { background-position: 200% 0; }
+  100% { background-position: 0 0; }
+}
+.animate-progress {
+  animation: progress 3s linear infinite;
+}
+
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.status-light {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  position: relative;
+  animation: pulse 2s infinite;
+}
+
+.status-light.status--running {
+  background: var(--color-success);
+}
+
+.status-light.status--not-running {
+  background: var(--color-error);
+}
+
+.status-light-glow {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  opacity: 0.3;
+}
+
+.status--running .status-light-glow {
+  background: var(--color-success);
+}
+
+.status--not-running .status-light-glow {
+  background: var(--color-error);
+}

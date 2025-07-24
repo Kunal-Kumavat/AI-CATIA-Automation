@@ -38,7 +38,7 @@ logger = logging.getLogger(__name__)
 
 #     except Exception as e:
 #         logger.exception(f"Failed to open .CATPart file: {e}")
-#         return Fal se
+#         return False
 
 
 
