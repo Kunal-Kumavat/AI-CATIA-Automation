@@ -6,6 +6,7 @@ import psutil
 
 
 from flask import Flask, jsonify
+from flask_cors import CORS
 from dotenv import load_dotenv
 
 
@@ -21,16 +22,14 @@ from backend.routes.home import home
 load_dotenv()  # Load environment variables from .env file
 
 app = Flask(__name__, template_folder="../templates")
+app.secret_key = 'abcd-efgh-ijkl-mnop'
 
+
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 app.register_blueprint(catia_automation)
 app.register_blueprint(sign_in)
 app.register_blueprint(home)
-
-
-
-UPLOAD_FOLDER = 'uploads'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 

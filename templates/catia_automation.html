@@ -1,72 +1,4 @@
-<!-- Backup UI - interface like blackbox UI
- <html lang="en">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1" name="viewport"/>
-  <title>
-   Screenshot UI
-  </title>
-  <script src="https://cdn.tailwindcss.com">
-  </script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
- </head>
- <body class="bg-white font-sans">
-  <div class="flex h-screen border border-gray-300">
-   <div class="w-[400px] border-r border-gray-300 flex flex-col p-4">
-    <button aria-label="Menu" class="mb-4 text-gray-600 hover:text-gray-900 focus:outline-none">
-     <i class="fas fa-bars text-lg">
-     </i>
-    </button>
-    <label class="text-xs text-gray-500 mb-1 select-none" for="include-screenshot">
-     Include screenshot of current version?
-    </label>
-    <button class="mb-4 w-full rounded-md border border-gray-300 bg-white py-2 text-center text-sm font-semibold text-gray-700 hover:bg-gray-50 focus:outline-none" id="include-screenshot">
-     Select and update
-    </button>
-    <div class="border border-gray-300 rounded-md overflow-hidden mb-4" style="aspect-ratio: 4 / 3">
-     <img alt="Screenshot thumbnail showing a UI with a left vertical toolbar and a center search input with tags below" class="w-full h-full object-contain" draggable="false" height="270" src="https://storage.googleapis.com/a1aa/image/dda74132-73b5-42d9-2437-bb3c3c32148f.jpg" width="360"/>
-    </div>
-    <div class="text-xs text-gray-400 uppercase mb-2 select-none">
-     Original Screenshot
-    </div>
-    <div class="flex space-x-2 mb-6">
-     <button aria-label="Desktop view" class="flex items-center justify-center w-10 h-10 rounded border border-gray-300 text-gray-600 hover:bg-gray-100 focus:outline-none">
-      <i class="fas fa-desktop">
-      </i>
-     </button>
-     <button aria-label="Mobile view" class="flex items-center justify-center w-10 h-10 rounded border border-gray-300 text-gray-600 hover:bg-gray-100 focus:outline-none">
-      <i class="fas fa-mobile-alt">
-      </i>
-     </button>
-     <button aria-label="Code view" class="flex items-center justify-center w-10 h-10 rounded border border-gray-300 text-gray-600 hover:bg-gray-100 focus:outline-none">
-      <i class="fas fa-code">
-      </i>
-     </button>
-     <button aria-label="Download" class="flex items-center justify-center w-10 h-10 rounded border border-gray-300 text-gray-600 hover:bg-gray-100 focus:outline-none">
-      <i class="fas fa-download">
-      </i>
-     </button>
-    </div>
-    <div class="text-sm font-semibold text-gray-700 mb-2 select-none">
-     Versions
-    </div>
-    <div class="flex justify-between items-center text-sm text-gray-700 border-t border-gray-300 pt-2 select-none">
-     <span>
-      Create
-     </span>
-     <select aria-label="Version select" class="border border-gray-300 rounded px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500">
-      <option>
-       v1
-      </option>
-     </select>
-    </div>
-   </div>
-   <div class="flex-1 border border-red-600 m-4 bg-gray-300">
-   </div>
-  </div>
- </body>
-</html> -->
-
+<!-- Code with chat interface and cad output
 <html lang="en">
 
 <head>
@@ -82,7 +14,7 @@
 
 <body class="bg-[#fdfdf8] text-[#0f3c4b] font-sans">
     <div class="flex flex-col md:flex-row h-screen">
-        <!-- Left panel -->
+
         <div class="flex flex-col w-[40%] border-r border-[#e5e7eb]">
             <header class="flex items-center justify-between px-6 py-4 border-b border-[#e5e7eb]">
                 <h1 class="text-2xl font-semibold">
@@ -95,7 +27,7 @@
                 </button>
             </header>
             <main class="flex-1 overflow-y-auto px-6 py-4 space-y-6">
-                <!-- Bot message 1 -->
+           
                 <div class="flex space-x-4 max-w-xl">
                     <div class="flex-shrink-0">
                         <img alt="Robot assistant icon with pink and blue colors" class="rounded-full" height="32"
@@ -108,7 +40,7 @@
                         boxes, measuring parts, and analyzing your models.
                     </div>
                 </div>
-                <!-- User message (vertical text) -->
+     
                 <div class="flex justify-end max-w-xl">
                     <div class="bg-[#19707a] text-white rounded-xl flex items-center justify-center w-14 h-36 text-center text-sm font-normal"
                         style="writing-mode: vertical-rl; text-orientation: mixed;">
@@ -121,7 +53,7 @@
                             width="32" />
                     </div>
                 </div>
-                <!-- Bot message 2 -->
+       
                 <div class="flex space-x-4 max-w-xl">
                     <div class="flex-shrink-0">
                         <img alt="Robot assistant icon with pink and blue colors" class="rounded-full" height="32"
@@ -146,7 +78,7 @@
                 </button>
             </form>
         </div>
-        <!-- Right panel -->
+
         <div class="flex flex-col w-[60%]">
             <header class="flex items-center justify-between px-6 py-4 border-b border-[#e5e7eb]">
                 <h2 class="text-2xl font-semibold">
@@ -205,6 +137,128 @@
                         3D Preview
                     </button>
                 </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='catia_automation.js') }}"></script>
+</body>
+
+</html> -->
+
+
+
+
+
+
+
+<!-- Dynamic code for chat conversation -->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <title>
+        AI Assistant CATIA Output
+    </title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+</head>
+
+<body class="bg-[#fdfdf8] text-[#0f3c4b] font-sans">
+    <div class="flex flex-col md:flex-row h-screen">
+
+        <div class="flex flex-col w-[40%] border-r border-[#e5e7eb]">
+            <header class="flex items-center justify-between px-6 py-4 border-b border-[#e5e7eb]">
+                <h1 class="text-2xl font-semibold">
+                    AI Assistant
+                </h1>
+                <button
+                    class="text-[#0f3c4b] text-sm border border-[#d1d5db] rounded-md px-3 py-1 hover:bg-[#f3f4f6] transition"
+                    type="button" onclick="returnHome()">
+                    ← Back to Home
+                </button>
+            </header>
+            <main id="chat-container" class="flex-1 overflow-y-auto px-6 py-4 space-y-6">
+           
+            </main>
+            <form id="chat-form" class="flex items-center border-t border-[#e5e7eb] px-6 py-4">
+                <input id="chat-input"
+                    class="flex-1 border border-[#d1d5db] rounded-lg px-4 py-3 text-[#4b5563] text-sm placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#19707a]"
+                    placeholder="Ask me about your CAD model..." type="text" />
+                <button
+                    class="ml-4 bg-[#19707a] text-white rounded-lg px-6 py-3 text-sm font-medium hover:bg-[#145a63] transition"
+                    type="submit">
+                    Send
+                </button>
+            </form>
+        </div>
+
+        <div class="flex flex-col w-[60%]">
+            <header class="flex items-center justify-between px-6 py-4 border-b border-[#e5e7eb]">
+                <h2 class="text-2xl font-semibold">
+                    CATIA Output
+                </h2>
+                <div class="flex space-x-3">
+                    <button
+                        class="flex items-center space-x-2 border border-[#d1d5db] rounded-md px-3 py-1 text-sm text-[#374151] hover:bg-[#f3f4f6] transition"
+                        type="button">
+                        <i class="fas fa-camera">
+                        </i>
+                        <span>
+                            Screenshot
+                        </span>
+                    </button>
+                    <button
+                        class="flex items-center space-x-2 border border-[#d1d5db] rounded-md px-3 py-1 text-sm text-[#374151] hover:bg-[#f3f4f6] transition"
+                        type="button">
+                        <i class="fas fa-sync-alt">
+                        </i>
+                        <span>
+                            Restart
+                        </span>
+                    </button>
+                </div>
+            </header>
+            <main class="flex flex-col flex-1 items-center justify-center px-6 py-12 text-center text-[#475569]">
+                {% if cad_screenshot  %}
+                    <img src="{{ url_for('static', filename=cad_screenshot) }}" alt="CAD Model Screenshot" class="mb-6 max-w-full h-auto" />
+                {% else %}
+                    <img alt="Light purple wrench icon representing CATIA visualization" class="mb-6" height="48"
+                        src="{{ url_for('static', filename='images/gears_icon.svg') }}"
+                        width="48" />
+                    <h3 class="text-lg font-semibold mb-2 text-[#475569]">
+                        CATIA Visualization
+                    </h3>
+                    <p class="mb-8 max-w-xs">
+                        CAD model visualizations and operation results will appear here
+                    </p>
+                    <div class="grid grid-cols-2 gap-4 max-w-md w-full">
+                        <button
+                            class="border border-[#d1d5db] rounded-md py-3 text-sm text-[#475569] hover:bg-[#f3f4f6] transition"
+                            type="button">
+                            Bounding Box
+                        </button>
+                        <button
+                            class="border border-[#d1d5db] rounded-md py-3 text-sm text-[#475569] hover:bg-[#f3f4f6] transition"
+                            type="button">
+                            Measurements
+                        </button>
+                        <button
+                            class="border border-[#d1d5db] rounded-md py-3 text-sm text-[#475569] hover:bg-[#f3f4f6] transition"
+                            type="button">
+                            Analysis Results
+                        </button>
+                        <button
+                            class="border border-[#d1d5db] rounded-md py-3 text-sm text-[#475569] hover:bg-[#f3f4f6] transition"
+                            type="button">
+                            3D Preview
+                        </button>
+                    </div>
+                    {% endif %}
             </main>
         </div>
     </div>
