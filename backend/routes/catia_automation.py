@@ -15,8 +15,17 @@ catia_automation = Blueprint('catia_automation', __name__, template_folder='../t
 @catia_automation.route('/catia_automation', methods=['GET', 'POST'])
 def catiaautomation():
     if request.method == "GET":
-        cad_screenshot = session.get('cad_screenshot', None)
-        return render_template('catia_automation.html', cad_screenshot = cad_screenshot)
+        cad_screenshots = session.get('cad_screenshot', None)
+        print("cad screenshots type and data", type(cad_screenshots), cad_screenshots)
+        if isinstance(cad_screenshots, str):
+            import ast
+            try:
+                cad_screenshots = ast.literal_eval(cad_screenshots)
+            except (ValueError, SyntaxError):
+                cad_screenshots = []
+    
+        print("cad screenshots type and data 2:", type(cad_screenshots), cad_screenshots)
+        return render_template('catia_automation.html', cad_screenshots = cad_screenshots)
     elif request.method == "POST":
         file = request.files.get('catpart_file')
         if not file:

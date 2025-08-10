@@ -165,6 +165,8 @@
     </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet" />
+
 
 </head>
 
@@ -224,8 +226,35 @@
                 </div>
             </header>
             <main class="flex flex-col flex-1 items-center justify-center px-6 py-12 text-center text-[#475569]">
-                {% if cad_screenshot  %}
-                    <img src="{{ url_for('static', filename=cad_screenshot) }}" alt="CAD Model Screenshot" class="mb-6 max-w-full h-auto" />
+                {% if cad_screenshots  %}
+                    <div class="grid grid-cols-2 gap-6 max-w-4xl mx-auto p-4">
+                    {% for img_path in cad_screenshots %}
+                        <div class="text-center cursor-pointer">
+                            <img 
+                            src="{{ url_for('static', filename=img_path) }}" 
+                            alt="{{ img_path }}" 
+                            class="w-full h-64 object-contain rounded border border-gray-300 hover:scale-105 transition-transform duration-200"
+                            onclick="openModal(this)" 
+                            />
+                            <div class="mt-2 text-gray-700 text-sm">{{ img_path.split('/')[-1] }}</div>
+                        </div>
+                    {% endfor %}
+                    </div>
+
+
+                    <!-- Modal Structure -->
+                    <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50">
+                    <div class="relative max-w-5xl max-h-[90vh]">
+                        <span 
+                        class="absolute top-3 right-3 text-white text-3xl cursor-pointer select-none"
+                        onclick="closeModal(event)"
+                        >&times;</span>
+                        <img id="modalImage" class="rounded max-w-full max-h-[90vh]" alt="Full view" />
+                        <div id="modalCaption" class="mt-2 text-center text-white text-lg select-text"></div>
+                    </div>
+                    </div>
+
+
                 {% else %}
                     <img alt="Light purple wrench icon representing CATIA visualization" class="mb-6" height="48"
                         src="{{ url_for('static', filename='images/gears_icon.svg') }}"

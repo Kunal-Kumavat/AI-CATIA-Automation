@@ -19,9 +19,9 @@ from pycatia.in_interfaces.specs_and_geom_window import SpecsAndGeomWindow
 from pycatia.in_interfaces.viewer_3d import Viewer3D
 from pycatia.product_structure_interfaces.product import Product
 
-def setup_save_path():
+def setup_save_path(model_folder_name):
     """Setup and create the image save directory"""
-    image_save_path = Path.cwd() / 'static' / 'catia_screenshots'
+    image_save_path = Path.cwd() / 'static' / 'catia_screenshots' / model_folder_name
     
     if not image_save_path.exists():
         image_save_path.mkdir(parents=True, exist_ok=True)
@@ -211,7 +211,7 @@ def capture_cad_model_screenshot():
             logger.warning(f"Active document '{active_document.name}' may not be a CATPart file")
         
         # Setup save directory inside static folder
-        image_save_path = setup_save_path()
+        image_save_path = setup_save_path(active_document.name)
         
         # Get product info for naming
         try:
@@ -248,12 +248,22 @@ def capture_cad_model_screenshot():
         time.sleep(1)  # Ensure UI updated
         
         # Prepare list of views to capture with sight directions and names
+        # views = [
+        #     ("default", None),                        # Default view, sight None means keep current
+        #     ("xy_plane", (0, 0, 1)),                 # Viewing along positive Z (XY plane)
+        #     ("yz_plane", (1, 0, 0)),                 # Viewing along positive X (YZ plane)
+        #     ("zx_plane", (0, 1, 0)),                 # Viewing along positive Y (ZX plane)
+        # ]
         views = [
-            ("default", None),                        # Default view, sight None means keep current
-            ("xy_plane", (0, 0, 1)),                 # Viewing along positive Z (XY plane)
-            ("yz_plane", (1, 0, 0)),                 # Viewing along positive X (YZ plane)
-            ("zx_plane", (0, 1, 0)),                 # Viewing along positive Y (ZX plane)
-        ]
+                # Default
+                ("default", None),
+                # Rotated by 90 degrees about Z axis (rightward tilt from X)
+                ("top_view_z", (0, 0, -1)),
+                # Rotated by 90 degrees about Y axis (X to Z)
+                ("front_view_x", (-1, 0, 0)),
+                # Rotated by 90 degrees about X axis (no change)
+                ("right_view_y", (0, -1, 0)),
+            ]
         
         # Function to set the sight direction or keep current
         def set_view_sight(sight_direction):
@@ -296,7 +306,7 @@ def capture_cad_model_screenshot():
                     img.save(png_name, 'PNG', optimize=True)
                 img_save_name.unlink()  # delete BMP
                 logger.info(f"Saved PNG screenshot: {png_name}")
-                captured_images.append(f"catia_screenshots/{png_name.name}")
+                captured_images.append(f"catia_screenshots/{active_document.name}/{png_name.name}")
             else:
                 logger.error(f"Failed to capture screenshot for {view_name}")
         
@@ -307,6 +317,7 @@ def capture_cad_model_screenshot():
         caa.start_command('Compass')  # toggle compass back
         
         if captured_images:
+            print("type of captured images", type(captured_images))
             print(f"\n✅ Captured {len(captured_images)} screenshots successfully!")
             for img in captured_images:
                 print(f"📁 Saved: {img}")

@@ -102,6 +102,35 @@ chatContainer.appendChild(createBotMessage(
 
 
 
+
+// static/js/image_modal.js
+
+function openModal(imgElement) {
+  const modal = document.getElementById("imageModal");
+  const modalImg = document.getElementById("modalImage");
+  const caption = document.getElementById("modalCaption");
+
+  modal.style.display = "block";
+  modalImg.src = imgElement.src;
+  caption.innerText = imgElement.alt;
+}
+
+function closeModal(event) {
+  if (event) event.stopPropagation(); // Prevent closing if clicking on modal content
+  document.getElementById("imageModal").style.display = "none";
+}
+
+// Optional: close modal when clicking outside the image content
+document.getElementById("imageModal").addEventListener("click", function(event) {
+  if (event.target.id === "imageModal") {
+    closeModal();
+  }
+});
+
+
+
+
+
 // Backup code as of 5 Aug
 // const chatContainer = document.getElementById('chat-container');
 //   const chatForm = document.getElementById('chat-form');
