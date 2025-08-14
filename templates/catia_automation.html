@@ -243,16 +243,29 @@
 
 
                     <!-- Modal Structure -->
+                    <!-- <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50">
+                        <div class="relative max-w-5xl max-h-[90vh]">
+                            <span 
+                            class="absolute top-3 right-3 text-white text-3xl cursor-pointer select-none"
+                            onclick="closeModal(event)"
+                            >&times;</span>
+                            <img id="modalImage" class="rounded max-w-full max-h-[90vh] mx-auto block" alt="Full view" />
+                            <div id="modalCaption" class="mt-2 text-center text-white text-lg select-text"></div>
+                        </div>
+                    </div> -->
+
+
                     <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center hidden z-50">
-                    <div class="relative max-w-5xl max-h-[90vh]">
-                        <span 
-                        class="absolute top-3 right-3 text-white text-3xl cursor-pointer select-none"
-                        onclick="closeModal(event)"
-                        >&times;</span>
-                        <img id="modalImage" class="rounded max-w-full max-h-[90vh]" alt="Full view" />
-                        <div id="modalCaption" class="mt-2 text-center text-white text-lg select-text"></div>
+                        <div class="relative rounded shadow-lg flex flex-col items-center max-w-3xl w-full p-6">
+                            <button class="absolute top-0 right-0 text-gray-900 text-3xl font-bold hover:text-gray-600" style="color: #CDDC39;"
+                                onclick="closeModal(event)" aria-label="Close">&times;</button>
+                            <div class="flex items-center justify-center w-full h-full">
+                                <img id="modalImage" class="rounded max-w-full max-h-[60vh] transition-all duration-200" alt="Full view" />
+                            </div>
+                            <div id="modalCaption" class="mt-6 text-center text-gray-900 text-lg font-semibold" style="color: #CDDC39;"></div>
+                        </div>
                     </div>
-                    </div>
+
 
 
                 {% else %}

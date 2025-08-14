@@ -44,7 +44,7 @@ function createBotMessage(message) {
 
   const messageBox = document.createElement('div');
   messageBox.className = 'bg-[#e9e8e3] rounded-xl p-6 text-[#0f3c4b] text-sm leading-relaxed max-w-[400px] break-words';
-  messageBox.innerText = marked.parse(message);
+  messageBox.innerHTML = marked.parse(message);
 
   wrapper.appendChild(avatar);
   wrapper.appendChild(messageBox);
@@ -105,22 +105,70 @@ chatContainer.appendChild(createBotMessage(
 
 // static/js/image_modal.js
 
+// function openModal(imgElement) {
+//   const modal = document.getElementById("imageModal");
+//   const modalImg = document.getElementById("modalImage");
+//   const caption = document.getElementById("modalCaption");
+
+//   modal.style.display = "block";
+//   modalImg.src = imgElement.src;
+//   caption.innerText = imgElement.alt;
+// }
+
+// function closeModal(event) {
+//   if (event) event.stopPropagation(); // Prevent closing if clicking on modal content
+//   document.getElementById("imageModal").style.display = "none";
+// }
+
+// // Optional: close modal when clicking outside the image content
+// document.getElementById("imageModal").addEventListener("click", function(event) {
+//   if (event.target.id === "imageModal") {
+//     closeModal();
+//   }
+// });
+
+
+
+
+
+// static/js/image_modal.js
+
 function openModal(imgElement) {
   const modal = document.getElementById("imageModal");
   const modalImg = document.getElementById("modalImage");
   const caption = document.getElementById("modalCaption");
 
-  modal.style.display = "block";
+  modal.style.display = "flex";
   modalImg.src = imgElement.src;
   caption.innerText = imgElement.alt;
+
+  // Set initial scale
+  modalImg.style.transform = "scale(1)";
+  modalImg.setAttribute("data-zoom", "1");
 }
 
 function closeModal(event) {
-  if (event) event.stopPropagation(); // Prevent closing if clicking on modal content
+  if (event) event.stopPropagation();
   document.getElementById("imageModal").style.display = "none";
 }
 
-// Optional: close modal when clicking outside the image content
+// Add zoom on scroll for modal image
+document.getElementById("modalImage").addEventListener("wheel", function(event) {
+  event.preventDefault();
+  const modalImg = event.target;
+  let zoom = parseFloat(modalImg.getAttribute("data-zoom")) || 1;
+
+  // Up = maximize, Down = minimize; set reasonable bounds
+  if (event.deltaY < 0) {
+    zoom = Math.min(zoom + 0.1, 3); // max 3x zoom
+  } else {
+    zoom = Math.max(zoom - 0.1, 0.5); // min 0.5x zoom
+  }
+  modalImg.style.transform = `scale(${zoom})`;
+  modalImg.setAttribute("data-zoom", zoom.toString());
+});
+
+// Optional: clicking outside closes modal
 document.getElementById("imageModal").addEventListener("click", function(event) {
   if (event.target.id === "imageModal") {
     closeModal();

@@ -249,20 +249,20 @@ def capture_cad_model_screenshot():
         
         # Prepare list of views to capture with sight directions and names
         # views = [
-        #     ("default", None),                        # Default view, sight None means keep current
-        #     ("xy_plane", (0, 0, 1)),                 # Viewing along positive Z (XY plane)
-        #     ("yz_plane", (1, 0, 0)),                 # Viewing along positive X (YZ plane)
-        #     ("zx_plane", (0, 1, 0)),                 # Viewing along positive Y (ZX plane)
+        #     ("Default_View", None),                     # Default view, sight None means keep current
+        #     ("Top_View", (0, 0, 1)),                 # Viewing along positive Z (XY plane)
+        #     ("Front_View", (1, 0, 0)),                 # Viewing along positive X (YZ plane)
+        #     ("Side_View", (0, 1, 0)),                 # Viewing along positive Y (ZX plane)
         # ]
         views = [
                 # Default
-                ("default", None),
+                ("Default_View", None),
                 # Rotated by 90 degrees about Z axis (rightward tilt from X)
-                ("top_view_z", (0, 0, -1)),
+                ("Top_View", (0, 0, -1)),
                 # Rotated by 90 degrees about Y axis (X to Z)
-                ("front_view_x", (-1, 0, 0)),
+                ("Front_View", (-1, 0, 0)),
                 # Rotated by 90 degrees about X axis (no change)
-                ("right_view_y", (0, -1, 0)),
+                ("Side_View", (0, -1, 0)),
             ]
         
         # Function to set the sight direction or keep current
@@ -290,7 +290,7 @@ def capture_cad_model_screenshot():
             time.sleep(1)  # wait for view update
             
             # Compose filename and save path
-            img_name = f"{safe_part_number}_{safe_revision}_{view_name}.bmp"
+            img_name = f"{view_name}.bmp"
             img_save_name = image_save_path / img_name
             
             if img_save_name.exists():

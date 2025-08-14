@@ -56,39 +56,39 @@
             color: #333;
         }
 
-        /* Modal styling */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            padding-top: 60px;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.8);
-        }
-        .modal-content {
-            margin: auto;
-            display: block;
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 6px;
-        }
-        .modal-caption {
-            margin: 15px auto;
-            text-align: center;
-            color: #f1f1f1;
-            font-size: 16px;
-        }
-        .modal-close {
-            position: absolute;
-            top: 25px;
-            right: 35px;
-            color: #fff;
-            font-size: 40px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .modal-close:hover {
-            color: #bbb;
-        }
+/* Modal styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    padding-top: 60px;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.8);
+}
+.modal-content {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 6px;
+}
+.modal-caption {
+    margin: 15px auto;
+    text-align: center;
+    color: #CDDC39;
+    font-size: 16px;
+}
+.modal-close {
+    position: absolute;
+    top: 25px;
+    right: 35px;
+    color: #CDDC39;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.modal-close:hover {
+    color: #bbb;
+}
