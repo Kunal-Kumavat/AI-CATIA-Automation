@@ -1,10 +1,13 @@
+from pathlib import Path
 from flask import Flask, Blueprint, request, render_template, flash, jsonify, session
-
+import os
 import requests
 from ollama import chat, ChatResponse
 import pythoncom
 from ..automation_scripts.bounding_box import generate_bounding_box
+from ..utils_scripts.report_generation import ppt_report_generation
 import json
+from flask import current_app, session
 
 ollama_api_url = "http://localhost:11434/api/generate"
 model_name = "qwen2.5vl:7b"
@@ -28,6 +31,10 @@ def catiaautomation():
                 cad_screenshots = []
     
         print("cad screenshots type and data 2:", type(cad_screenshots), cad_screenshots)
+        
+        first_image_path = cad_screenshots[0]  # e.g., 'catia_screenshots/.../Default_View.png'
+        cad_part_filename = Path(first_image_path).parent.name
+        print("Extracted filename:", cad_part_filename)
         return render_template('catia_automation.html', cad_screenshots = cad_screenshots)
     elif request.method == "POST":
         file = request.files.get('catpart_file')
@@ -59,6 +66,17 @@ def ollama_chat():
         "Respond ONLY with the JSON object."
     )
 
+    intent_instruction = (
+    "Analyze and classify the following user input and return a JSON object with the following format:\n"
+    "{'bounding_box_intent': true or false, 'offset': offset value mentioned in prompt or 0(zero)}, 'powerpoint_intent': true or false "
+    "Only either one between bounding_box_intent or powerpoint_intent can be true.  Here's what each intent means:\n"
+    "- bounding_box_intent: true when user wants to generate a bounding box and not report else false(e.g., 'generate bounding box')\n"
+    "- powerpoint_intent: true when user wants generate a PowerPoint report of the results  else false (e.g., 'generate powerpoint report on bounding box output result')\n"
+    "- offset: parameter value for bounding box (e.g., 'generate bounding box with offset 10')\n\n"
+    "Now analyze the user input below. Think step by step, then respond ONLY with the JSON object."
+)
+
+
     full_prompt = f"{intent_instruction}\nUser Query: {prompt}"
     print("Full prompt for intent analysis:", full_prompt)
 
@@ -81,10 +99,16 @@ def ollama_chat():
         intent_data = json.loads(analysis)
         print("intent_data type", type(intent_data), intent_data)
 
-        bbox_intent = intent_data.get("user_bbox_intent", False)
+        # bbox_intent = intent_data.get("user_bbox_intent", False)
+        # print("bbox_intent", bbox_intent)
+        # offset = int(intent_data.get("offset", 0))
+        # print("offset", offset)
+        bbox_intent = intent_data.get("bounding_box_intent", False)
         print("bbox_intent", bbox_intent)
         offset = int(intent_data.get("offset", 0))
         print("offset", offset)
+        ppt_intent = intent_data.get("powerpoint_intent", False)
+        print("ppt_intent", ppt_intent)
 
         if bbox_intent:
             # User wants to generate bounding box
@@ -95,6 +119,43 @@ def ollama_chat():
                 return jsonify({"response": "Bounding Box generated successfully"})
             else:
                 return jsonify({"response": result})
+            
+        elif ppt_intent:
+            # User wants to generate PowerPoint report
+            cad_screenshots = session.get('cad_screenshot')
+            print("DEBUG session cad_screenshot:", cad_screenshots)  # Debugging line
+
+            if not cad_screenshots:
+                return jsonify({"response": "No screenshots found in session"}), 400
+            
+            # Parse list if stored as string
+            if isinstance(cad_screenshots, str):
+                import ast
+                try:
+                    cad_screenshots = ast.literal_eval(cad_screenshots)
+                except (ValueError, SyntaxError):
+                    cad_screenshots = []
+
+            if not cad_screenshots:
+                return jsonify({"response": "Invalid screenshot list in session"}), 400
+
+            first_image_path = cad_screenshots[0]
+            cad_part_folder = Path(first_image_path).parent.name
+            print("Extracted CAD part folder name:", cad_part_folder)
+            project_root = Path(current_app.root_path)
+            image_folder_path = project_root / "static" / "catia_screenshots" / cad_part_folder
+            output_path = Path.home() / "Downloads"
+            
+            print("Absolute image folder path:", image_folder_path)  # Now should print!
+            print("Output PowerPoint path:", output_path)
+            # Call PPT function
+            try:
+                # ppt_file = ppt_report_generation(image_folder=str(image_folder_path), output_path=output_path, filename = cad_part_folder)
+                ppt_file = ppt_report_generation(image_folder=str(image_folder_path), filename=cad_part_folder)
+                return jsonify({"response": f"PPT generated successfully and stored at path: {ppt_file}"})
+            except Exception as e:
+                return jsonify({"response": f"Error generating PPT: {str(e)}"}), 500  
+
 
         else:
             # User is asking a general CAD-related question
