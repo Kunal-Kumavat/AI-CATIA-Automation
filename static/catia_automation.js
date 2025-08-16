@@ -95,7 +95,7 @@ chatForm.addEventListener('submit', async (e) => {
 
 // Optionally, initialize with a welcome message from bot
 chatContainer.appendChild(createBotMessage(
-  "Hello! I'm your CATIA AI assistant. I can help you with CAD operations like generating bounding boxes, measuring parts, and analyzing your models."
+  "Hello! I'm your CATIA AI assistant. I can help you with CAD operations like generating bounding box, calculating parts measurement, and analyzing your models."
 ));
 
 
