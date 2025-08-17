@@ -83,6 +83,7 @@ chatForm.addEventListener('submit', async (e) => {
     const data = await response.json();
     const botReply = data.response || data.error || 'Sorry, no reply.';
     chatContainer.appendChild(createBotMessage(botReply));
+
   } catch (err) {
     console.error('Error fetching bot response:', err);
     chatContainer.appendChild(createBotMessage('Oops! Something went wrong.'));
@@ -97,9 +98,6 @@ chatForm.addEventListener('submit', async (e) => {
 chatContainer.appendChild(createBotMessage(
   "Hello! I'm your CATIA AI assistant. I can help you with CAD operations like generating bounding box, calculating parts measurement, and analyzing your models."
 ));
-
-
-
 
 
 
@@ -284,3 +282,43 @@ document.getElementById("imageModal").addEventListener("click", function(event) 
 //   chatContainer.appendChild(createBotMessage(
 //     "Hello! I'm your CATIA AI assistant. I can help you with CAD operations like generating bounding boxes, measuring parts, and analyzing your models."
 //   ));
+
+
+
+
+
+
+
+
+
+// function updateScreenshots(screenshotUrls) {
+//     console.log("Updating screenshots with:", screenshotUrls);
+
+//     const container = document.querySelector('.grid');
+//     if (!container) {
+//         console.error("Image container not found!");
+//         return;
+//     }
+
+//     container.innerHTML = ''; // Clear existing images
+
+//     screenshotUrls.forEach(url => {
+//         const div = document.createElement('div');
+//         div.className = "text-center cursor-pointer";
+
+//         const img = document.createElement('img');
+//         img.src = `${url}?t=${Date.now()}`;  // Cache busting
+//         img.alt = url;
+//         img.className = "w-full h-64 object-contain rounded border border-gray-300 hover:scale-105 transition-transform duration-200";
+//         img.onclick = () => openModal(img);
+
+//         const caption = document.createElement('div');
+//         caption.className = "mt-2 text-gray-700 text-sm";
+//         caption.textContent = url.split('/').pop();
+
+//         div.appendChild(img);
+//         div.appendChild(caption);
+//         container.appendChild(div);
+//     });
+// }
+

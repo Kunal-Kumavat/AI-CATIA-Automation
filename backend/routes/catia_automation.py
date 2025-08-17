@@ -6,8 +6,11 @@ from ollama import chat, ChatResponse
 import pythoncom
 from ..automation_scripts.bounding_box import generate_bounding_box
 from ..utils_scripts.report_generation import ppt_report_generation
+from ..automation_scripts.part_screenshot import capture_cad_model_screenshot
 import json
 from flask import current_app, session
+from flask import url_for
+
 
 ollama_api_url = "http://localhost:11434/api/generate"
 model_name = "qwen2.5vl:7b"
@@ -116,7 +119,17 @@ def ollama_chat():
             result = generate_bounding_box(offset)
             print('backed by calling bounding box function, result:', result)
             if result is True:
-                return jsonify({"response": "Bounding Box generated successfully"})
+                saved_screenshot_names  = capture_cad_model_screenshot()
+                print("from home py file ", saved_screenshot_names)
+                if saved_screenshot_names:
+                    session['cad_screenshot'] = f"{saved_screenshot_names}"
+                    screenshot_urls = [url_for('static', filename=img_path) for img_path in saved_screenshot_names]
+                    return jsonify({
+                        "response": "Bounding Box generated successfully",
+                        "screenshots": screenshot_urls
+                    })
+                else:
+                    return jsonify({"response": "Failed to capture screenshots"})
             else:
                 return jsonify({"response": result})
             
@@ -228,5 +241,37 @@ def ollama_chat():
 #         return jsonify({"error": str(e)}), 500
 
 
-
-
+@catia_automation.route('/refresh-images', methods=['GET'])
+def refresh_images():
+    import os
+    from flask import jsonify, request
+    
+    # Get the filename parameter from the request
+    filename = request.args.get('filename', '')
+    
+    if not filename:
+        return jsonify({'error': 'Filename parameter is required'}), 400
+    
+    # Construct the path to the images folder
+    images_folder = os.path.join('static', 'catia_screenshots', filename)
+    
+    try:
+        # Get list of image files from the folder
+        if os.path.exists(images_folder):
+            image_files = []
+            for file in os.listdir(images_folder):
+                if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):
+                    # Create the relative path for Flask's url_for
+                    relative_path = os.path.join('catia_screenshots', filename, file).replace('\\', '/')
+                    image_files.append(relative_path)
+            
+            return jsonify({
+                'success': True,
+                'images': image_files,
+                'count': len(image_files)
+            })
+        else:
+            return jsonify({'error': 'Images folder not found'}), 404
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

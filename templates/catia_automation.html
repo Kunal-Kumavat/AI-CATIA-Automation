@@ -215,19 +215,17 @@
                         </span>
                     </button>
                     <button
+                        id="refresh-btn"
                         class="flex items-center space-x-2 border border-[#d1d5db] rounded-md px-3 py-1 text-sm text-[#374151] hover:bg-[#f3f4f6] transition"
                         type="button">
-                        <i class="fas fa-sync-alt">
-                        </i>
-                        <span>
-                            Restart
-                        </span>
+                        <i class="fas fa-sync-alt"  id="refresh-icon"></i>
+                        <span>Refresh</span>
                     </button>
                 </div>
             </header>
             <main class="flex flex-col flex-1 items-center justify-center px-6 py-12 text-center text-[#475569]">
                 {% if cad_screenshots  %}
-                    <div class="grid grid-cols-2 gap-6 max-w-4xl mx-auto p-4">
+                    <div id="cad-grid" class="grid grid-cols-2 gap-6 max-w-4xl mx-auto p-4">
                     {% for img_path in cad_screenshots %}
                         <div class="text-center cursor-pointer">
                             <img 
@@ -302,10 +300,102 @@
                     </div>
                     {% endif %}
             </main>
+
         </div>
     </div>
 
     <script src="{{ url_for('static', filename='catia_automation.js') }}"></script>
+    
+    <script>
+        document.getElementById('refresh-btn').addEventListener('click', function () {
+            refreshImages();
+        });
+
+        function refreshImages() {
+            const refreshBtn = document.getElementById('refresh-btn');
+            const refreshIcon = document.getElementById('refresh-icon');
+            const cadGrid = document.getElementById('cad-grid');
+
+            // Disable button and add loading state
+            refreshBtn.disabled = true;
+            refreshIcon.classList.add('fa-spin');
+
+            // Extract filename from existing images (assuming all images are from same folder)
+            const existingImages = cadGrid.querySelectorAll('img');
+            if (existingImages.length === 0) {
+                console.error('No existing images found to determine folder');
+                resetButtonState();
+                return;
+            }
+
+            // Get filename from the first image path
+            const firstImageSrc = existingImages[0].getAttribute('src');
+            const pathParts = firstImageSrc.split('/');
+            const filename = pathParts[pathParts.length - 2]; // Get folder name before image filename
+
+            // Make AJAX request to refresh images
+            fetch(`{{ url_for('catia_automation.refresh_images') }}?filename=${encodeURIComponent(filename)}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateImageGrid(data.images);
+                    } else {
+                        console.error('Error refreshing images:', data.error);
+                        alert('Error refreshing images: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    alert('Network error occurred while refreshing images');
+                })
+                .finally(() => {
+                    resetButtonState();
+                });
+        }
+
+        function updateImageGrid(imageList) {
+            const cadGrid = document.getElementById('cad-grid');
+
+            // Clear existing images
+            cadGrid.innerHTML = '';
+
+            // Add updated images
+            imageList.forEach(imagePath => {
+                const imageContainer = document.createElement('div');
+                imageContainer.className = 'text-center cursor-pointer';
+
+                // Add cache busting parameter to force reload
+                const cacheBuster = new Date().getTime();
+                const imageUrl = `{{ url_for('static', filename='') }}${imagePath}?v=${cacheBuster}`;
+
+                imageContainer.innerHTML = `
+                <img 
+                src="${imageUrl}" 
+                alt="${imagePath}" 
+                class="w-full h-64 object-contain rounded border border-gray-300 hover:scale-105 transition-transform duration-200"
+                onclick="openModal(this)" 
+                />
+                <div class="mt-2 text-gray-700 text-sm">${imagePath.split('/').pop()}</div>
+            `;
+
+                cadGrid.appendChild(imageContainer);
+            });
+        }
+
+        function resetButtonState() {
+            const refreshBtn = document.getElementById('refresh-btn');
+            const refreshIcon = document.getElementById('refresh-icon');
+
+            refreshBtn.disabled = false;
+            refreshIcon.classList.remove('fa-spin');
+        }
+    </script>
 </body>
 
 </html>
